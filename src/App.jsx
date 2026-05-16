@@ -237,36 +237,34 @@ export default function App() {
       <div className="absolute bottom-[-200px] right-[-200px] w-[500px] h-[500px] bg-violet-500/10 rounded-full blur-[150px] animate-pulse"></div>
 
       {/* Branding */}
-      <div className="absolute top-5 left-6 z-30">
+<div className="absolute top-4 left-1/2 -translate-x-1/2 md:left-6 md:translate-x-0 z-30 text-center md:text-left px-4">
 
-        <h1 className="text-fuchsia-300 text-xl font-black tracking-[3px] uppercase leading-none drop-shadow-[0_0_20px_#d946ef]">
+  <h1 className="text-fuchsia-300 text-sm sm:text-lg md:text-xl font-black tracking-[2px] md:tracking-[3px] uppercase leading-none drop-shadow-[0_0_20px_#d946ef]">
 
-          Cyber Guardians
+    Cyber Guardians
 
-        </h1>
+  </h1>
 
-        <p className="text-fuchsia-200/80 tracking-[2px] uppercase text-[10px] mt-1">
+  <p className="text-fuchsia-200/80 tracking-[1px] md:tracking-[2px] uppercase text-[8px] sm:text-[10px] mt-1">
 
-          Stay Alert • Stay Secure
+    Stay Alert • Stay Secure
 
-        </p>
+  </p>
 
-      </div>
-
+</div>
       {/* Main Content */}
       <div className="relative z-20 min-h-screen flex flex-col items-center justify-center px-4">
 
         {/* Floating Panel */}
-        <div className="w-full max-w-6xl backdrop-blur-[18px] bg-[#120018]/8 border border-fuchsia-300/20 rounded-[32px] shadow-[0_0_60px_rgba(217,70,239,0.10)] p-8 animate-[float_6s_ease-in-out_infinite] hover:scale-[1.01] transition-all duration-500">
-
+        <div className="w-full max-w-6xl backdrop-blur-[18px] bg-[#120018]/8 border border-fuchsia-300/20 rounded-[32px] shadow-[0_0_60px_rgba(217,70,239,0.10)] p-4 sm:p-6 md:p-8 mt-20 md:mt-0 animate-[float_6s_ease-in-out_infinite] hover:scale-[1.01] transition-all duration-500">
           {/* Header */}
           <div className="text-center mb-6">
 
-            <h2 className="text-3xl font-black text-fuchsia-300 uppercase tracking-[4px] drop-shadow-[0_0_28px_#d946ef]">
+           <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-fuchsia-300 uppercase tracking-[2px] md:tracking-[4px] drop-shadow-[0_0_28px_#d946ef] break-words leading-tight">
 
-              CyberPass Guardian
+  CyberPass Guardian
 
-            </h2>
+</h2>
 
             <p className="text-fuchsia-100/70 mt-2">
 
