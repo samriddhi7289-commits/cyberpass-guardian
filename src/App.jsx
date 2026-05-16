@@ -1,14 +1,23 @@
 import React, { useState } from "react";
 import "./index.css";
+import cyberBg from "./assets/cyber-bg.png";
 
 export default function App() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#12002f] text-white px-3 py-4 flex items-center justify-center overflow-hidden">
+    <div
+      className="min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center px-3 py-4"
+      style={{
+        backgroundImage: `url(${cyberBg})`,
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
 
-      <div className="w-full max-w-6xl rounded-[24px] border border-purple-700 bg-[#1a003d]/80 backdrop-blur-lg p-4 md:p-8 shadow-2xl relative overflow-hidden">
+      {/* MAIN CONTAINER */}
+      <div className="relative z-10 w-full max-w-6xl rounded-[24px] border border-purple-700 bg-[#1a003d]/80 backdrop-blur-lg p-4 md:p-8 shadow-2xl overflow-hidden">
 
         {/* HEADER */}
         <div className="flex flex-col md:flex-row md:justify-between md:items-start items-center gap-4 mb-6">
@@ -44,7 +53,7 @@ export default function App() {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-[#25004d] border border-purple-700 rounded-xl px-4 py-4 text-base md:text-xl outline-none"
+            className="w-full bg-[#25004d] border border-purple-700 rounded-xl px-4 py-4 text-base md:text-xl outline-none text-white"
           />
 
           <button
