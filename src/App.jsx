@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./index.css";
 import cyberBg from "./assets/cyber-bg.png";
 import zxcvbn from "zxcvbn";
@@ -6,7 +6,7 @@ import zxcvbn from "zxcvbn";
 export default function App() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+const [breachStatus, setBreachStatus] = useState("");
   // REAL PASSWORD ANALYSIS
   const analysis = zxcvbn(password);
 
@@ -25,6 +25,78 @@ export default function App() {
     "bg-lime-500",
     "bg-green-500",
   ];
+  useEffect(() => {
+
+  const checkBreach = async () => {
+
+    if (!password) {
+      setBreachStatus("");
+      return;
+    }
+
+    try {
+
+      const encoder = new TextEncoder();
+
+      const data = encoder.encode(password);
+
+      const hashBuffer =
+        await crypto.subtle.digest(
+          "SHA-1",
+          data
+        );
+
+      const hashArray = Array.from(
+        new Uint8Array(hashBuffer)
+      );
+
+      const hash = hashArray
+        .map((b) =>
+          b.toString(16).padStart(2, "0")
+        )
+        .join("")
+        .toUpperCase();
+
+      const prefix = hash.slice(0, 5);
+
+      const suffix = hash.slice(5);
+
+      const response = await fetch(
+        `https://api.pwnedpasswords.com/range/${prefix}`
+      );
+
+      const text = await response.text();
+
+      const hashes = text.split("\n");
+
+      const found = hashes.find((h) =>
+        h.startsWith(suffix)
+      );
+
+      if (found) {
+
+        setBreachStatus(
+          "⚠ Password Found in Data Breaches"
+        );
+
+      } else {
+
+        setBreachStatus(
+          "✅ No Known Breaches Found"
+        );
+      }
+
+    } catch {
+
+      setBreachStatus(
+        "Error Checking Breaches"
+      );
+    }
+  };
+
+  checkBreach();
+
+}, [password]);
 
   return (
     <div
@@ -34,7 +106,20 @@ export default function App() {
       }}
     >
       {/* LIGHT OVERLAY */}
-      <div className="absolute inset-0 bg-black/25"></div>
+     {/* Animated Overlay */}
+<div className="absolute inset-0 bg-black/30"></div>
+
+{/* Scan Line */}
+<div className="absolute inset-0 overflow-hidden">
+
+  <div className="absolute w-full h-[2px] bg-cyan-400/40 blur-sm animate-[scan_4s_linear_infinite]"></div>
+
+</div>
+
+{/* Cyber Glow */}
+<div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-fuchsia-500/20 rounded-full blur-[120px] animate-pulse"></div>
+
+<div className="absolute bottom-[-100px] right-[-100px] w-[300px] h-[300px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse"></div>
 
       {/* MAIN CONTAINER */}
       <div className="relative z-10 w-full max-w-6xl rounded-[24px] border border-purple-500 bg-[#1a003d]/82 backdrop-blur-sm p-4 md:p-6 shadow-2xl overflow-hidden">
@@ -156,20 +241,24 @@ export default function App() {
           </div>
 
           {/* FEEDBACK */}
-          <div className="bg-[#2a004d]/75 border border-purple-500 rounded-xl p-4">
+        {/* BREACH STATUS */}
+<div className="bg-[#2a004d]/75 border border-purple-500 rounded-xl p-4">
 
-            <h3 className="text-sm md:text-lg mb-3 text-white">
-              🛡 Suggestions
-            </h3>
+  <h3 className="text-sm md:text-lg mb-3 text-white">
+    🛡 Breach Status
+  </h3>
 
-            <p className="text-xs md:text-sm text-[#ffb8d9]">
-              {
-                analysis.feedback.warning ||
-                "Excellent Password"
-              }
-            </p>
+  <p
+    className={`text-xs md:text-sm ${
+      breachStatus.includes("⚠")
+        ? "text-red-400"
+        : "text-green-300"
+    }`}
+  >
+    {breachStatus || "Waiting for input..."}
+  </p>
 
-          </div>
+</div>
 
         </div>
 
