@@ -1,10 +1,30 @@
 import React, { useState } from "react";
 import "./index.css";
 import cyberBg from "./assets/cyber-bg.png";
+import zxcvbn from "zxcvbn";
 
 export default function App() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  // REAL PASSWORD ANALYSIS
+  const analysis = zxcvbn(password);
+
+  const strengthLevels = [
+    "Very Weak",
+    "Weak",
+    "Medium",
+    "Strong",
+    "Very Strong",
+  ];
+
+  const strengthColors = [
+    "bg-red-500",
+    "bg-orange-500",
+    "bg-yellow-500",
+    "bg-lime-500",
+    "bg-green-500",
+  ];
 
   return (
     <div
@@ -82,33 +102,47 @@ export default function App() {
         {/* CARDS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
 
-          {/* CARD 1 */}
+          {/* STRENGTH */}
           <div className="bg-[#2a004d]/75 border border-purple-500 rounded-xl p-4">
 
             <h3 className="text-sm md:text-lg mb-3 text-white">
               ⚡ Strength
             </h3>
 
-            <p className="text-2xl md:text-3xl font-semibold text-white">
-              Weak
+            <div className="w-full h-3 bg-black/30 rounded-full overflow-hidden mb-3">
+
+              <div
+                className={`h-full ${strengthColors[analysis.score]} transition-all duration-500`}
+                style={{
+                  width: `${(analysis.score + 1) * 20}%`,
+                }}
+              ></div>
+
+            </div>
+
+            <p className="text-xl md:text-2xl font-semibold text-white">
+              {strengthLevels[analysis.score]}
             </p>
 
           </div>
 
-          {/* CARD 2 */}
+          {/* CRACK TIME */}
           <div className="bg-[#2a004d]/75 border border-purple-500 rounded-xl p-4">
 
             <h3 className="text-sm md:text-lg mb-3 text-white">
               ⏳ Crack Time
             </h3>
 
-            <p className="text-2xl md:text-3xl font-semibold text-[#ffc6f3]">
-              2 Minutes
+            <p className="text-lg md:text-2xl font-semibold text-[#ffc6f3]">
+              {
+                analysis.crack_times_display
+                  .offline_fast_hashing_1e10_per_second
+              }
             </p>
 
           </div>
 
-          {/* CARD 3 */}
+          {/* SCORE */}
           <div className="bg-[#2a004d]/75 border border-purple-500 rounded-xl p-4">
 
             <h3 className="text-sm md:text-lg mb-3 text-white">
@@ -116,30 +150,37 @@ export default function App() {
             </h3>
 
             <p className="text-3xl md:text-4xl font-semibold text-[#ffc6f3]">
-              0/100
+              {analysis.score * 25}/100
             </p>
 
           </div>
 
-          {/* CARD 4 */}
+          {/* FEEDBACK */}
           <div className="bg-[#2a004d]/75 border border-purple-500 rounded-xl p-4">
 
             <h3 className="text-sm md:text-lg mb-3 text-white">
-              🛡 Breach
+              🛡 Suggestions
             </h3>
 
-            <p className="text-xs md:text-sm text-[#ff9fb3]">
-              Password found in breaches
+            <p className="text-xs md:text-sm text-[#ffb8d9]">
+              {
+                analysis.feedback.warning ||
+                "Excellent Password"
+              }
             </p>
 
           </div>
 
         </div>
 
-        {/* FOOTER */}
+        {/* TIPS */}
         <div className="mt-5 bg-[#2a004d]/75 border border-purple-500 rounded-xl p-3 text-center text-[10px] md:text-sm text-white leading-relaxed">
 
-          💡 Use at least 8 characters • Add uppercase letters • Add lowercase letters • Add numbers • Add symbols
+          {
+            analysis.feedback.suggestions.length > 0
+              ? analysis.feedback.suggestions.join(" • ")
+              : "Your password is highly secure."
+          }
 
         </div>
 
